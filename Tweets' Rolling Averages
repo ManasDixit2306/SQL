@@ -1,0 +1,21 @@
+WITH Answer AS (
+SELECT user_id, tweet_date, COUNT(tweet_id) AS total_tweets
+FROM tweets
+GROUP BY user_id, tweet_date
+ORDER BY user_id, tweet_date
+
+SELECT user_id, tweet_date,
+ROUND(AVG(total_tweets) OVER (PARTITION BY user_id ORDER BY user_id, tweet_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW), 2)
+AS rolling_avg
+FROM Answer
+
+-- OR
+
+SELECT user_id, tweet_date, 
+ROUND(
+AVG(COUNT(tweet_id))
+OVER (PARTITION BY user_id ORDER BY user_id, tweet_date
+ROWS BETWEEN 2 PRECEDING AND CURRENT ROW), 2) 
+AS rolling_avg_3_days
+FROM tweets
+GROUP BY user_id, tweet_date;
