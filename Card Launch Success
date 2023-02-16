@@ -1,0 +1,11 @@
+WITH Answer AS (
+SELECT issue_year, issue_month, card_name, issued_amount,
+ROW_NUMBER() OVER (PARTITION BY card_name ORDER BY issued_amount) AS ranking
+FROM monthly_cards_issued
+ORDER BY card_name, issue_year, issue_month
+)
+
+SELECT card_name, issued_amount
+FROM Answer 
+WHERE ranking = 1
+ORDER BY issued_amount DESC;
