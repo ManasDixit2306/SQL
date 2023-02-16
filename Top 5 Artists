@@ -1,0 +1,17 @@
+WITH Answer AS (
+SELECT artist_name,
+DENSE_RANK() OVER (ORDER BY COUNT(rank) DESC) AS artist_rank
+FROM artists
+JOIN songs
+ON artists.artist_id = songs.artist_id
+JOIN global_song_rank
+ON songs.song_id = global_song_rank.song_id
+WHERE rank <= 10
+GROUP BY artist_name
+ORDER BY COUNT(rank) DESC
+)
+
+SELECT artist_name, artist_rank
+FROM Answer
+WHERE artist_rank <=5
+;
