@@ -1,0 +1,13 @@
+WITH Answer AS
+(
+SELECT manufacturer, drug, 
+ROW_NUMBER() OVER (PARTITION BY manufacturer ORDER BY units_sold DESC) 
+AS ranking 
+FROM pharmacy_sales
+)
+
+
+SELECT manufacturer, drug AS top_drugs
+FROM Answer
+WHERE ranking IN (1,2)
+ORDER BY manufacturer;
