@@ -1,0 +1,5 @@
+SELECT ROUND(SUM (CASE WHEN signup_action = 'Confirmed' THEN 1 ELSE 0 END)/CAST(COUNT(user_id) AS DECIMAL), 2)
+AS activation_rate
+FROM texts
+INNER JOIN emails
+ON texts.email_id = emails.email_id;
